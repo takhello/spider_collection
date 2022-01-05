@@ -94,7 +94,7 @@ class xhub():
         title_list.extend(parsel.Selector(html).xpath("//div/p/a/@title").getall())
         print("已解析完页面："+url)
         self.parse_count+=1
-        with open(os.path.dirname(os.getcwd())+"\\video\\video_id.txt", mode="a",encoding='utf-8') as f:
+        with open(os.path.dirname(os.getcwd())+"/video/video_id.txt", mode="a",encoding='utf-8') as f:
             for i in range(0,len(id_list)):
                 f.write(id_list[i]+"-"+title_list[i]+"\n")
                 # print(id_list[i]+"-"+title_list[i])
@@ -107,14 +107,14 @@ class xhub():
         file_name=id_string.split("-")[1]
         print("开始下载:"+file_name)
         video=requests.get(url=json_result["URL"])
-        with open(os.path.dirname(os.getcwd())+'\\video\\' + file_name+".mp4", mode='wb') as w_f:
+        with open(os.path.dirname(os.getcwd())+'/video/' + file_name+".mp4", mode='wb') as w_f:
             w_f.write(video.content)
             print("保存成功："+file_name)
         w_f.close()
 
     def parse_all(self,thread_num):
         pool=ThreadPool(thread_num)
-        f=open(os.path.dirname(os.getcwd())+"\\video\\video_url.txt",mode="r",encoding="utf-8")
+        f=open(os.path.dirname(os.getcwd())+"/video/video_url.txt",mode="r",encoding="utf-8")
         lines=f.readlines()
         total_num=len(lines)
         for i in lines:
@@ -127,7 +127,7 @@ class xhub():
 
     def download_all(self,thread_num):
         pool = ThreadPool(thread_num)
-        f = open(os.path.dirname(os.getcwd())+"\\video\\video_id.txt", mode="r", encoding="utf-8")
+        f = open(os.path.dirname(os.getcwd())+"/video/video_id.txt", mode="r", encoding="utf-8")
         for i in f:
             pool.run(func=self.download, args=(i.strip("\n"),))
             # print(i)
@@ -135,7 +135,7 @@ class xhub():
 
 if __name__ == '__main__':
     xhub=xhub()
-    file_flag=os.path.exists(os.path.dirname(os.getcwd())+"\\video\\video_id.txt")
+    file_flag=os.path.exists(os.path.dirname(os.getcwd())+"/video/video_id.txt")
     if not file_flag:
         total_num = xhub.parse_all(20)
         print("." * 30 + "正在请求解析" + "." * 30)
@@ -145,7 +145,7 @@ if __name__ == '__main__':
             else:
                 time.sleep(1)
     else:
-        f_r = open(os.path.dirname(os.getcwd())+"\\video\\video_id.txt",mode="r",encoding="utf-8")
+        f_r = open(os.path.dirname(os.getcwd())+"/video/video_id.txt",mode="r",encoding="utf-8")
         f_len =len(f_r.readline())
         f_r.close()
         if f_len == 0:
